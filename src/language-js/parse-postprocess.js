@@ -7,6 +7,7 @@ const {
 const createError = require("../common/parser-create-error");
 const { locStart, locEnd } = require("./loc");
 const { isTypeCastComment } = require("./comments");
+const traverse = require("./traverse");
 
 function postprocess(ast, options) {
   // Invalid decorators are removed since `@typescript-eslint/typescript-estree` v4
@@ -14,7 +15,7 @@ function postprocess(ast, options) {
   if (options.parser === "typescript" && options.originalText.includes("@")) {
     const { esTreeNodeToTSNodeMap, tsNodeToESTreeNodeMap } =
       options.tsParseResult;
-    ast = visitNode(ast, (node) => {
+    ast = traverse(ast, (node) => {
       const tsNode = esTreeNodeToTSNodeMap.get(node);
       if (!tsNode) {
         return;
@@ -64,7 +65,7 @@ function postprocess(ast, options) {
     // E.g.: /** @type {Foo} */ (foo).bar();
     // Let's use the fact that those ancestors and ParenthesizedExpression have the same start offset.
 
-    ast = visitNode(ast, (node) => {
+    ast = traverse(ast, (node) => {
       if (
         node.leadingComments &&
         node.leadingComments.some(isTypeCastComment)
@@ -73,7 +74,7 @@ function postprocess(ast, options) {
       }
     });
 
-    ast = visitNode(ast, (node) => {
+    ast = traverse(ast, (node) => {
       if (node.type === "ParenthesizedExpression") {
         const { expression } = node;
 
@@ -92,7 +93,7 @@ function postprocess(ast, options) {
     });
   }
 
-  ast = visitNode(ast, (node) => {
+  ast = traverse(ast, (node) => {
     switch (node.type) {
       // Espree
       case "ChainExpression": {
@@ -189,32 +190,6 @@ function transformChainExpression(node) {
     node.expression = transformChainExpression(node.expression);
   }
   return node;
-}
-
-function visitNode(node, fn) {
-  let entries;
-
-  if (Array.isArray(node)) {
-    entries = node.entries();
-  } else if (
-    node &&
-    typeof node === "object" &&
-    typeof node.type === "string"
-  ) {
-    entries = Object.entries(node);
-  } else {
-    return node;
-  }
-
-  for (const [key, child] of entries) {
-    node[key] = visitNode(child, fn);
-  }
-
-  if (Array.isArray(node)) {
-    return node;
-  }
-
-  return fn(node) || node;
 }
 
 function isUnbalancedLogicalTree(node) {
