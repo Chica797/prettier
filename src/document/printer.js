@@ -459,7 +459,7 @@ function printDocToString(doc, options) {
           break;
         }
 
-        const secondContent = parts[3];
+        const secondContent = parts[2];
 
         // At this point we've handled the first pair (context, separator)
         // and will create a new *mutable* fill doc for the rest of the content.
