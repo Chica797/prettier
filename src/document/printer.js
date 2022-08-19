@@ -18,12 +18,7 @@ import {
   DOC_TYPE_LABEL,
   DOC_TYPE_BREAK_PARENT,
 } from "./constants.js";
-import {
-  fill,
-  cursor,
-  indent,
-  hardlineWithoutBreakParent,
-} from "./builders.js";
+import { cursor, indent, hardlineWithoutBreakParent } from "./builders.js";
 import { getDocParts, getDocType } from "./utils.js";
 import InvalidDocError from "./invalid-doc-error.js";
 
