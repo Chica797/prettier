@@ -16,7 +16,29 @@ test("`printDocToString` should not manipulate docs", () => {
 
   expect(doc.parts.length).toBe(255 + 254);
 
-  const { formatted: seconPrint } = printDocToString(doc, printOptions);
+  const { formatted: secondPrint } = printDocToString(doc, printOptions);
 
-  expect(firstPrint).toBe(seconPrint);
+  expect(firstPrint).toBe(secondPrint);
+
+  {
+    // About 1000 lines , 3263
+    const WORD = "word";
+    const hugeParts = join(
+      line,
+      Array.from(
+        { length: 1000 * Math.ceil(printOptions.printWidth / WORD.length) },
+        () => WORD
+      )
+    );
+    const orignalLength = hugeParts.length;
+
+    const startTime = performance.now();
+    const { formatted } = printDocToString(fill(hugeParts), printOptions);
+    const endTime = performance.now();
+    expect(hugeParts.length).toBe(orignalLength);
+
+    const lines = formatted.split("\n");
+    expect(lines.length).toBeGreaterThan(1000);
+    expect(endTime - startTime).toBeLessThan(1000);
+  }
 });
