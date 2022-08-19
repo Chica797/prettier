@@ -21,7 +21,7 @@ test("`printDocToString` should not manipulate docs", () => {
   expect(firstPrint).toBe(secondPrint);
 
   {
-    // About 1000 lines , 3263
+    // About 1000 lines, #3263
     const WORD = "word";
     const hugeParts = join(
       line,
