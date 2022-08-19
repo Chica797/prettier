@@ -435,7 +435,7 @@ function printDocToString(doc, options) {
           [],
           rem,
           lineSuffix.length > 0,
-          true,
+          true
         );
 
         if (parts.length === 1) {
@@ -488,7 +488,7 @@ function printDocToString(doc, options) {
           [],
           rem,
           lineSuffix.length > 0,
-          true,
+          true
         );
 
         if (firstAndSecondContentFits) {
@@ -608,7 +608,7 @@ function printDocToString(doc, options) {
   if (cursorPlaceholderIndex !== -1) {
     const otherCursorPlaceholderIndex = out.indexOf(
       cursor.placeholder,
-      cursorPlaceholderIndex + 1,
+      cursorPlaceholderIndex + 1
     );
     const beforeCursor = out.slice(0, cursorPlaceholderIndex).join("");
     const aroundCursor = out
