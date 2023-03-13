@@ -49,6 +49,7 @@ const additionalVisitorKeys = {
 const excludeKeys = {
   // From `tsVisitorKeys`
   MethodDefinition: ["typeParameters"],
+  PropertyDefinition: ["tsModifiers"],
 
   // From `flowVisitorKeys`
   ArrowFunctionExpression: ["id"],
