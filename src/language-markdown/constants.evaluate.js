@@ -1,5 +1,4 @@
 import * as cjkRegex from "cjk-regex";
-import * as regexpUtil from "regexp-util";
 import unicodeRegex from "unicode-regex";
 import escapeStringRegexp from "escape-string-regexp";
 
