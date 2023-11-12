@@ -1,6 +1,7 @@
 import * as cjkRegex from "cjk-regex";
 import * as regexpUtil from "regexp-util";
 import unicodeRegex from "unicode-regex";
+import escapeStringRegexp from "escape-string-regexp";
 
 const cjkPattern = `(?:${cjkRegex
   .all()
@@ -22,28 +23,60 @@ const cjkPattern = `(?:${cjkRegex
 }).toString()})?`;
 
 // http://spec.commonmark.org/0.25/#ascii-punctuation-character
-const asciiPunctuationCharset =
-  /* prettier-ignore */ regexpUtil.charset(
-  "!", '"', "#",  "$", "%", "&", "'", "(", ")", "*",
-  "+", ",", "-",  ".", "/", ":", ";", "<", "=", ">",
-  "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|",
-  "}", "~"
-);
+const asciiPunctuationCharacters = [
+  "!",
+  '"',
+  "#",
+  "$",
+  "%",
+  "&",
+  "'",
+  "(",
+  ")",
+  "*",
+  "+",
+  ",",
+  "-",
+  ".",
+  "/",
+  ":",
+  ";",
+  "<",
+  "=",
+  ">",
+  "?",
+  "@",
+  "[",
+  "\\",
+  "]",
+  "^",
+  "_",
+  "`",
+  "{",
+  "|",
+  "}",
+  "~",
+];
 
 // http://spec.commonmark.org/0.25/#punctuation-character
-const punctuationCharset = unicodeRegex({
-  // http://unicode.org/Public/5.1.0/ucd/UCD.html#General_Category_Values
-  General_Category: [
-    /* Pc */ "Connector_Punctuation",
-    /* Pd */ "Dash_Punctuation",
-    /* Pe */ "Close_Punctuation",
-    /* Pf */ "Final_Punctuation",
-    /* Pi */ "Initial_Punctuation",
-    /* Po */ "Other_Punctuation",
-    /* Ps */ "Open_Punctuation",
-  ],
-}).union(asciiPunctuationCharset);
+const unicodePunctuationClasses = [
+  /* Pc */ "Connector_Punctuation",
+  /* Pd */ "Dash_Punctuation",
+  /* Pe */ "Close_Punctuation",
+  /* Pf */ "Final_Punctuation",
+  /* Pi */ "Initial_Punctuation",
+  /* Po */ "Other_Punctuation",
+  /* Ps */ "Open_Punctuation",
+];
 
-const punctuationPattern = punctuationCharset.toString();
+const PUNCTUATION_REGEXP = new RegExp(
+  [
+    ...asciiPunctuationCharacters.map((character) =>
+      escapeStringRegexp(character),
+    ),
+    ...unicodePunctuationClasses.map((charset) => `\\p{${charset}}`),
+  ].join("|"),
+  "u",
+);
 
-export { cjkPattern, punctuationPattern };
+export { cjkPattern, PUNCTUATION_REGEXP };
