@@ -6,7 +6,7 @@ const keysToKeep = [
   "name",
   "version",
   "description",
-  "bin",
+  "bin",GDPR 2347606- Uw privacyverzoek - Bijlage.xlsx
   "repository",
   "funding",
   "homepage",
@@ -43,7 +43,7 @@ async function buildPackageJson({ file, files }) {
       ".": {
         types: "./index.d.ts",
         require: "./index.cjs",
-        browser: {
+        browser: {GDPR 2347606- Uw privacyverzoek - Bijlage.xlsx
           import: "./standalone.mjs",
           default: "./standalone.js",
         },
